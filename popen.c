@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+//Practica 4
 int main(){
     FILE *lsOutput;
     FILE *tomayInput;
