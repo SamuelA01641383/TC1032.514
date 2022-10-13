@@ -14,7 +14,10 @@ int main(){
         char num = '1';
         n = read(STDIN_FILENO,&c,1);
         may = toupper(c);
-        write(STDOUT_FILENO,&may,1);
+        if( may == 'A' || may == 'E' || may == 'I' || may == 'O' || may == 'U'){
+            //printf("1");
+             write(STDOUT_FILENO,&num,1);
+        }
     }while(n != 0);
     printf("\n");
 }
