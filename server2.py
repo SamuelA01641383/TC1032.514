@@ -9,34 +9,27 @@ class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         print("Hola desde el get")
         if "/sensor1_temp" in self.path:
-            sensor1_temp = slef.path.split("=")[1] 
+            sensor1_temp = slef.path.split("=")[1]
+            print("La temperatura es {}".format(sensor1_temp))
+            self._set_response()
+            self.wfile.write("Hola este es mi super server. GET request for {}".format(self.path).encode('utf-8'))
             #........................................
-            current_date = datetime.now()
-            date = current_date.strftime('%Y-%m-%d')
-            hour = current_date.strftime('%H')
-            collectionName = u'sensor_Samuel_${0}'.format(date)
+           
+            collectionName = u'sensor_Samuel_${0}'
             
-            encendido = bool(random.getrandbits(1))
-            
-            totals_ref = db.collection(collectionName).document('totals')
-            totals_doc = totals_ref.get()
-            totals_data = totals_doc.to_dict()
+            temperatura_ref = db.collection(collectionName).document('temperatura')
+            temperatura_doc = temperatura_ref.get()
+            temperatura_data = temperatura_doc.to_dict()
     
-            if totals_data == None:
-                totals_ref.set({
-                    u'total_minutos_encendido': 1 if encendido else 0,
+            if temperatura_data == None:
+                temperatura_ref.set({
+                    u'temperatura.2': sensor1_temp,
                 })
             else:
-                if encendido:
-                    totals_ref.update({
-                        u'total.minutos_encendido': totals_data[u'total_minutos_encendido'] + 1,
+                temperatura_ref.update({
+                    u'temperatura_medida': temperatura_data[u'temperatura_medida'],
                     })  
             #........................................
- 
-            print("La temperatura es {}".format(sensor1_temp))
-        self._set_response()
-        self.wfile.write("Hola este es mi super server. GET request for {}".format(self.path).encode('utf-8'))
-
 port = 8080
 server_address = ('', port)
 httpd = HTTPServer(server_address, MyServer)
